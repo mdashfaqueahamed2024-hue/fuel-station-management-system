@@ -16,10 +16,11 @@ import {
   LogOut,
   ChevronRight,
   Flame,
+  X,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.jsx';
 
-export const Sidebar = () => {
+export const Sidebar = ({ isMobileMenuOpen, setIsMobileMenuOpen }) => {
   const { user, logout, isAdmin, isManager } = useAuth();
 
   const navGroups = [
@@ -58,21 +59,36 @@ export const Sidebar = () => {
   ];
 
   return (
-    <aside className="w-64 bg-slate-900 border-r border-slate-800 text-slate-300 flex flex-col shrink-0 select-none">
+    <aside
+      className={`fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 border-r border-slate-800 text-slate-300 flex flex-col shrink-0 select-none transform transition-transform duration-300 ease-in-out md:static md:translate-x-0 ${
+        isMobileMenuOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'
+      }`}
+    >
       {/* Brand Logo Header */}
-      <div className="h-16 flex items-center px-6 gap-3 border-b border-slate-800/80 bg-slate-950/40">
-        <div className="w-9 h-9 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
-          <Flame className="w-5 h-5 text-amber-300 fill-amber-300" />
-        </div>
-        <div>
-          <div className="font-bold text-white text-base tracking-tight flex items-center gap-1.5">
-            PetroFlow
-            <span className="text-[10px] uppercase font-semibold px-1.5 py-0.5 rounded bg-blue-900/60 text-blue-400 border border-blue-800/60">
-              PRO
-            </span>
+      <div className="h-16 flex items-center justify-between px-5 border-b border-slate-800/80 bg-slate-950/40">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20 shrink-0">
+            <Flame className="w-5 h-5 text-amber-300 fill-amber-300" />
           </div>
-          <div className="text-[11px] text-slate-400">Enterprise Fuel Station OS</div>
+          <div>
+            <div className="font-bold text-white text-base tracking-tight flex items-center gap-1.5">
+              PetroFlow
+              <span className="text-[10px] uppercase font-semibold px-1.5 py-0.5 rounded bg-blue-900/60 text-blue-400 border border-blue-800/60">
+                PRO
+              </span>
+            </div>
+            <div className="text-[11px] text-slate-400">Enterprise Fuel Station</div>
+          </div>
         </div>
+
+        {/* Mobile Close Drawer Button */}
+        <button
+          onClick={() => setIsMobileMenuOpen(false)}
+          className="md:hidden text-slate-400 hover:text-white p-1 rounded-md transition"
+          aria-label="Close menu"
+        >
+          <X className="w-5 h-5" />
+        </button>
       </div>
 
       {/* Navigation Links */}
@@ -92,8 +108,9 @@ export const Sidebar = () => {
                   <NavLink
                     key={item.path}
                     to={item.path}
+                    onClick={() => setIsMobileMenuOpen(false)}
                     className={({ isActive }) =>
-                      `flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all group ${
+                      `flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-medium transition-all group ${
                         isActive
                           ? 'bg-blue-600 text-white shadow-sm shadow-blue-600/30 font-semibold'
                           : 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/60'
