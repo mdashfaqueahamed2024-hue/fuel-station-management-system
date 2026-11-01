@@ -1,0 +1,26 @@
+{
+  "name": "fuel-station-management-system",
+  "version": "1.0.0",
+  "description": "PetroFlow — Enterprise Fuel Station Management & Intelligence System (B.Tech Capstone Project)",
+  "private": true,
+  "scripts": {
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "test": "cd backend && npm test",
+    "seed": "cd backend && npm run prisma:seed",
+    "db:sqlite": "cd backend && npm run db:sqlite",
+    "db:pg": "cd backend && npm run db:pg"
+  },
+  "keywords": [
+    "fuel-station",
+    "petroleum-management",
+    "pos",
+    "prisma-orm",
+    "react",
+    "express",
+    "postgresql",
+    "vitest"
+  ],
+  "author": "B.Tech Computer Science & Engineering",
+  "license": "ISC"
+}

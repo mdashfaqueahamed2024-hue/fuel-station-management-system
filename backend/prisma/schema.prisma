@@ -1,0 +1,399 @@
+// Prisma Schema for Fuel Station Management System
+// Target Database: SQLite (Zero-configuration Local Dev/Demo mode)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Station {
+  id           String        @id @default(uuid())
+  code         String        @unique
+  name         String
+  address      String
+  city         String
+  state        String
+  phone        String
+  active       Boolean       @default(true)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  users        User[]
+  employees    Employee[]
+  fuels        FuelProduct[]
+  tanks        Tank[]
+  pumps        Pump[]
+  sales        Sale[]
+  deliveries   Delivery[]
+  shifts       Shift[]
+  expenses     Expense[]
+  customers    Customer[]
+  alerts       Alert[]
+  auditLogs    AuditLog[]
+  reconciliations StockReconciliation[]
+}
+
+model User {
+  id           String     @id @default(uuid())
+  stationId    String?
+  station      Station?   @relation(fields: [stationId], references: [id])
+  email        String     @unique
+  passwordHash String
+  fullName     String
+  role         String     @default("ATTENDANT") // ADMIN, MANAGER, ATTENDANT
+  phone        String?
+  active       Boolean    @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  employee     Employee?
+  recordedMeters MeterReading[]
+  approvedExpenses Expense[] @relation("ApprovedExpenses")
+  recordedExpenses Expense[] @relation("RecordedExpenses")
+  auditLogs    AuditLog[]
+}
+
+model Employee {
+  id           String     @id @default(uuid())
+  stationId    String
+  station      Station    @relation(fields: [stationId], references: [id])
+  userId       String?    @unique
+  user         User?      @relation(fields: [userId], references: [id])
+  employeeCode String     @unique
+  fullName     String
+  phone        String
+  role         String
+  status       String     @default("ACTIVE")
+  joiningDate  DateTime   @default(now())
+  salary       Float?
+  createdAt    DateTime   @default(now())
+
+  shifts       Shift[]
+  sales        Sale[]
+  receivedDeliveries Delivery[]
+}
+
+model FuelProduct {
+  id                 String        @id @default(uuid())
+  stationId          String
+  station            Station       @relation(fields: [stationId], references: [id])
+  code               String
+  name               String
+  fuelType           String        // PETROL, DIESEL, PREMIUM_PETROL, CNG, OTHER
+  currentPrice       Float
+  costPrice          Float
+  lowStockThreshold  Float
+  colorCode          String        @default("#2563eb")
+  active             Boolean       @default(true)
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+
+  tanks              Tank[]
+  sales              Sale[]
+  deliveries         Delivery[]
+  stockMovements     StockMovement[]
+  stockAdjustments   StockAdjustment[]
+
+  @@unique([stationId, code])
+}
+
+model Tank {
+  id                      String        @id @default(uuid())
+  stationId               String
+  station                 Station       @relation(fields: [stationId], references: [id])
+  fuelProductId           String
+  fuelProduct             FuelProduct   @relation(fields: [fuelProductId], references: [id])
+  tankNumber              String
+  capacityLiters          Float
+  currentStockLiters      Float
+  lowStockThresholdLiters Float
+  active                  Boolean       @default(true)
+  createdAt               DateTime      @default(now())
+  updatedAt               DateTime      @updatedAt
+
+  pumps                   Pump[]
+  deliveries              Delivery[]
+  sales                   Sale[]
+  stockMovements          StockMovement[]
+  stockAdjustments        StockAdjustment[]
+  reconciliations         StockReconciliation[]
+
+  @@unique([stationId, tankNumber])
+}
+
+model Pump {
+  id                 String        @id @default(uuid())
+  stationId          String
+  station            Station       @relation(fields: [stationId], references: [id])
+  tankId             String
+  tank               Tank          @relation(fields: [tankId], references: [id])
+  pumpNumber         String
+  pumpName           String
+  status             String        @default("ACTIVE") // ACTIVE, INACTIVE, MAINTENANCE
+  totalLifetimeLiters Float        @default(0.0)
+  createdAt          DateTime      @default(now())
+
+  sales              Sale[]
+  meterReadings      MeterReading[]
+  shiftMeters        ShiftMeter[]
+
+  @@unique([stationId, pumpNumber])
+}
+
+model MeterReading {
+  id               String      @id @default(uuid())
+  stationId        String
+  pumpId           String
+  pump             Pump        @relation(fields: [pumpId], references: [id])
+  readingType      String      // OPENING, CLOSING, AUDIT, RESET
+  readingValue     Float
+  differenceLiters Float?
+  recordedAt       DateTime    @default(now())
+  recordedByUserId String?
+  recordedBy       User?       @relation(fields: [recordedByUserId], references: [id])
+  notes            String?
+}
+
+model Supplier {
+  id            String      @id @default(uuid())
+  name          String
+  contactPerson String?
+  phone         String
+  email         String?
+  address       String?
+  taxId         String?
+  active        Boolean     @default(true)
+  createdAt     DateTime    @default(now())
+
+  deliveries    Delivery[]
+}
+
+model Delivery {
+  id                   String         @id @default(uuid())
+  stationId            String
+  station              Station        @relation(fields: [stationId], references: [id])
+  supplierId           String
+  supplier             Supplier       @relation(fields: [supplierId], references: [id])
+  destinationTankId    String
+  destinationTank      Tank           @relation(fields: [destinationTankId], references: [id])
+  fuelProductId        String
+  fuelProduct          FuelProduct    @relation(fields: [fuelProductId], references: [id])
+  deliveryReference    String         @unique
+  invoiceNumber        String
+  orderedQuantityLiters Float
+  receivedQuantityLiters Float
+  discrepancyLiters    Float          @default(0.0)
+  unitCost             Float
+  totalCost            Float
+  deliveryDate         DateTime       @default(now())
+  receivingEmployeeId  String?
+  receivingEmployee    Employee?      @relation(fields: [receivingEmployeeId], references: [id])
+  status               String         @default("PENDING") // PENDING, CONFIRMED, REJECTED
+  notes                String?
+  createdAt            DateTime       @default(now())
+}
+
+model Customer {
+  id             String      @id @default(uuid())
+  stationId      String
+  station        Station     @relation(fields: [stationId], references: [id])
+  name           String
+  phone          String?
+  email          String?
+  companyName    String?
+  customerType   String      @default("INDIVIDUAL") // INDIVIDUAL, COMMERCIAL_FLEET
+  creditLimit    Float       @default(0.0)
+  currentBalance Float       @default(0.0)
+  active         Boolean     @default(true)
+  createdAt      DateTime    @default(now())
+
+  sales          Sale[]
+}
+
+model Shift {
+  id           String      @id @default(uuid())
+  stationId    String
+  station      Station     @relation(fields: [stationId], references: [id])
+  employeeId   String
+  employee     Employee    @relation(fields: [employeeId], references: [id])
+  shiftName    String      // MORNING, EVENING, NIGHT
+  startTime    DateTime    @default(now())
+  endTime      DateTime?
+  status       String      @default("OPEN") // OPEN, CLOSED
+  openingCash  Float       @default(0.0)
+  expectedCash Float       @default(0.0)
+  actualCash   Float       @default(0.0)
+  cashVariance Float       @default(0.0)
+  closingNotes String?
+  createdAt    DateTime    @default(now())
+
+  sales        Sale[]
+  shiftMeters  ShiftMeter[]
+}
+
+model ShiftMeter {
+  id             String    @id @default(uuid())
+  shiftId        String
+  shift          Shift     @relation(fields: [shiftId], references: [id])
+  pumpId         String
+  pump           Pump      @relation(fields: [pumpId], references: [id])
+  openingReading Float
+  closingReading Float?
+  volumeSold     Float?
+}
+
+model Sale {
+  id                String        @id @default(uuid())
+  stationId         String
+  station           Station       @relation(fields: [stationId], references: [id])
+  transactionNumber String        @unique
+  pumpId            String
+  pump              Pump          @relation(fields: [pumpId], references: [id])
+  fuelProductId     String
+  fuelProduct       FuelProduct   @relation(fields: [fuelProductId], references: [id])
+  tankId            String
+  tank              Tank          @relation(fields: [tankId], references: [id])
+  attendantId       String
+  attendant         Employee      @relation(fields: [attendantId], references: [id])
+  customerId        String?
+  customer          Customer?     @relation(fields: [customerId], references: [id])
+  shiftId           String?
+  shift             Shift?        @relation(fields: [shiftId], references: [id])
+  quantityLiters    Float
+  pricePerLiter     Float
+  discountAmount    Float         @default(0.0)
+  taxAmount         Float         @default(0.0)
+  totalAmount       Float
+  paymentMethod     String        @default("CASH") // CASH, CARD, UPI, FLEET_CREDIT
+  paymentStatus     String        @default("COMPLETED") // COMPLETED, PENDING, REVERSED
+  reversalReason    String?
+  reversedAt        DateTime?
+  reversedByUserId  String?
+  createdAt         DateTime      @default(now())
+
+  @@index([stationId, createdAt])
+  @@index([transactionNumber])
+}
+
+model StockMovement {
+  id                 String       @id @default(uuid())
+  stationId          String
+  tankId             String
+  tank               Tank         @relation(fields: [tankId], references: [id])
+  fuelProductId      String
+  fuelProduct        FuelProduct  @relation(fields: [fuelProductId], references: [id])
+  movementType       String       // SALE, DELIVERY, ADJUSTMENT, REVERSAL
+  quantityLiters     Float
+  balanceAfterLiters Float
+  referenceId        String?
+  referenceType      String?      // SALE, DELIVERY, ADJUSTMENT, REVERSAL
+  notes              String?
+  createdAt          DateTime     @default(now())
+
+  @@index([tankId, createdAt])
+}
+
+model StockAdjustment {
+  id                 String         @id @default(uuid())
+  stationId          String
+  tankId             String
+  tank               Tank           @relation(fields: [tankId], references: [id])
+  fuelProductId      String
+  fuelProduct        FuelProduct    @relation(fields: [fuelProductId], references: [id])
+  adjustmentType     String         // POSITIVE, NEGATIVE
+  quantityLiters     Float
+  reason             String         // EVAPORATION, CALIBRATION_DISCREPANCY, AUDIT_CORRECTION, SPILLAGE
+  performedByUserId  String?
+  notes              String?
+  createdAt          DateTime       @default(now())
+}
+
+model ExpenseCategory {
+  id          String    @id @default(uuid())
+  name        String    @unique
+  description String?
+  expenses    Expense[]
+}
+
+model Expense {
+  id               String          @id @default(uuid())
+  stationId        String
+  station          Station         @relation(fields: [stationId], references: [id])
+  categoryId       String
+  category         ExpenseCategory @relation(fields: [categoryId], references: [id])
+  description      String
+  amount           Float
+  expenseDate      DateTime        @default(now())
+  recordedByUserId String
+  recordedBy       User            @relation("RecordedExpenses", fields: [recordedByUserId], references: [id])
+  approvedByUserId String?
+  approvedBy       User?           @relation("ApprovedExpenses", fields: [approvedByUserId], references: [id])
+  approvalStatus   String          @default("PENDING") // PENDING, APPROVED, REJECTED
+  receiptRef       String?
+  createdAt        DateTime        @default(now())
+
+  @@index([stationId, expenseDate])
+}
+
+model StockReconciliation {
+  id                     String    @id @default(uuid())
+  stationId              String
+  station                Station   @relation(fields: [stationId], references: [id])
+  tankId                 String
+  tank                   Tank      @relation(fields: [tankId], references: [id])
+  reconciliationDate     DateTime  @default(now())
+  openingStock           Float
+  deliveriesReceived     Float
+  salesDeducted          Float
+  adjustments            Float
+  expectedClosingStock   Float
+  physicalMeasuredStock  Float
+  varianceLiters         Float
+  variancePercentage     Float
+  status                 String    // BALANCED, DISCREPANCY, REVIEW_REQUIRED
+  notes                  String?
+  reconciledByUserId     String?
+  createdAt              DateTime  @default(now())
+
+  @@index([tankId, reconciliationDate])
+}
+
+model Alert {
+  id               String        @id @default(uuid())
+  stationId        String
+  station          Station       @relation(fields: [stationId], references: [id])
+  alertType        String        // LOW_STOCK, HIGH_CAPACITY, METER_DISCREPANCY, CASH_VARIANCE, ANOMALY, UNCLOSED_SHIFT
+  severity         String        @default("MEDIUM") // LOW, MEDIUM, HIGH, CRITICAL
+  title            String
+  message          String
+  status           String        @default("ACTIVE") // ACTIVE, RESOLVED
+  resolvedAt       DateTime?
+  resolvedByUserId String?
+  createdAt        DateTime      @default(now())
+
+  @@index([stationId, status])
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  stationId  String?
+  station    Station? @relation(fields: [stationId], references: [id])
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id])
+  actorName  String
+  action     String   // LOGIN, LOGOUT, SALE_CREATE, SALE_REVERSE, PRICE_UPDATE, STOCK_ADJUST, SHIFT_CLOSE, DELIVERY_CONFIRM, EXPENSE_APPROVE
+  entityType String   // Sale, FuelProduct, Tank, Delivery, Shift, Expense, User
+  entityId   String?
+  beforeState String? // JSON text
+  afterState  String? // JSON text
+  ipAddress  String?
+  createdAt  DateTime @default(now())
+
+  @@index([stationId, createdAt])
+  @@index([action])
+}
