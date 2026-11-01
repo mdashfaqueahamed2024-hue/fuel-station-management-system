@@ -2,7 +2,17 @@
 
 A Full-Stack Web Application for Intelligent Fuel Inventory, Pump Operations, Sales Monitoring, and Business Analytics.
 
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmdashfaqueahamed2024-hue%2Ffuel-station-management-system&project-name=petroflow-fuel-system)
+
 Designed and developed as a university-level Bachelor of Technology (B.Tech) Capstone Project in Computer Science & Engineering.
+
+---
+
+## 🌐 Live Cloud Deployment (Vercel)
+
+- **Official Live Demo:** [https://prompt-oasis-rmu4e60.tmp.now](https://prompt-oasis-rmu4e60.tmp.now)
+- **Claim or Bind Permanent `.vercel.app` Domain:** [Claim Deployment on Vercel](https://vercel.com/claim-deployment?code=8a9e0e1d-adda-4dd7-91f2-16056885ec00)
+- **1-Click GitHub to Vercel Import:** Click the **Deploy with Vercel** button above or import repository `mdashfaqueahamed2024-hue/fuel-station-management-system` at [vercel.com/new](https://vercel.com/new).
 
 ---
 

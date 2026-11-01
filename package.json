@@ -4,6 +4,7 @@
   "description": "PetroFlow — Enterprise Fuel Station Management & Intelligence System (B.Tech Capstone Project)",
   "private": true,
   "scripts": {
+    "build": "npm run build --prefix frontend",
     "dev:backend": "cd backend && npm run dev",
     "dev:frontend": "cd frontend && npm run dev",
     "test": "cd backend && npm test",
