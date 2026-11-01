@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext.jsx';
 import { StationProvider } from './context/StationContext.jsx';
 import { ToastProvider } from './context/ToastContext.jsx';
@@ -48,7 +48,7 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <ToastProvider>
         <AuthProvider>
           <StationProvider>
@@ -92,6 +92,6 @@ export default function App() {
           </StationProvider>
         </AuthProvider>
       </ToastProvider>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
