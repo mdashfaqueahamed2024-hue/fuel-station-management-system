@@ -8,11 +8,13 @@ Designed and developed as a university-level Bachelor of Technology (B.Tech) Cap
 
 ---
 
-## 🌐 Live Cloud Deployment (Vercel)
+## 🌐 Permanent Live Production Deployment (Works 24/7 on All Devices)
 
-- **Official Live Demo:** [https://brisk-rowan-v8hc6ph.tmp.now](https://brisk-rowan-v8hc6ph.tmp.now)
-- **Claim or Bind Permanent `.vercel.app` Domain:** [Claim Deployment on Vercel](https://vercel.com/claim-deployment?code=1021af16-88ea-49f6-a15f-28140fd2cabb)
-- **1-Click GitHub to Vercel Import:** Click the **Deploy with Vercel** button above or import repository `mdashfaqueahamed2024-hue/fuel-station-management-system` at [vercel.com/new](https://vercel.com/new).
+* **🚀 Permanent Live URL (Google Chrome / Mobile / Desktop):**
+  ### 👉 [https://mdashfaqueahamed2024-hue.github.io/fuel-station-management-system/](https://mdashfaqueahamed2024-hue.github.io/fuel-station-management-system/)
+
+* **Vercel 1-Click Import:** Click the **Deploy with Vercel** button above or import repository `mdashfaqueahamed2024-hue/fuel-station-management-system` at [vercel.com/new](https://vercel.com/new).
+* **Claim Deployment on Vercel:** [Claim Temporary Vercel Deployment](https://vercel.com/claim-deployment?code=1021af16-88ea-49f6-a15f-28140fd2cabb)
 
 ---
 
