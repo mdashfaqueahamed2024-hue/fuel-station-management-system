@@ -98,21 +98,26 @@ git push -u origin main
 
 ---
 
-### Step 4: Deploy the Frontend on Vercel (2 minutes)
+### Step 4: Deploy the Frontend on Vercel (1-Click or Manual)
+
+#### Option A: Direct 1-Click Import (Recommended)
+1. Log in to [vercel.com](https://vercel.com) using your GitHub account (`mdashfaqueahamed2024-hue`).
+2. Go to [https://vercel.com/new](https://vercel.com/new).
+3. Find your repository **`fuel-station-management-system`** in the list and click **Import**.
+4. The project is already pre-configured with root [`vercel.json`](../vercel.json) and automatic build detection. Simply click **Deploy**!
+5. In approximately 30 seconds, Vercel will give you a live production URL:
+   `https://fuel-station-management-system.vercel.app` (or your custom project name).
+
+#### Option B: Manual Configuration
 1. Go to [https://vercel.com](https://vercel.com) and log in with GitHub.
 2. Click **Add New...** → **Project**.
 3. Import your `fuel-station-management-system` repository.
 4. In the Project Configuration window:
    - **Framework Preset:** `Vite`
-   - **Root Directory:** Click **Edit** and choose `frontend`.
-   - **Build Command:** `npm run build` (detected automatically)
-   - **Output Directory:** `dist` (detected automatically)
-5. Expand **Environment Variables** and add:
-   - **Name:** `VITE_API_URL`
-   - **Value:** *(Paste your Render backend API URL from Step 3, e.g., `https://petroflow-api.onrender.com/api`)*
-6. Click **Deploy**.
-7. In approximately 30 seconds, Vercel will give you a live production URL:
-   `https://petroflow-enterprise.vercel.app`
+   - **Root Directory:** Choose `frontend` (or keep `./` since root `vercel.json` is configured).
+   - **Build Command:** `npm run build`
+   - **Output Directory:** `dist`
+5. Click **Deploy**.
 
 ---
 

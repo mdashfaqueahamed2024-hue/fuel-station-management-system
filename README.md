@@ -10,8 +10,8 @@ Designed and developed as a university-level Bachelor of Technology (B.Tech) Cap
 
 ## 🌐 Live Cloud Deployment (Vercel)
 
-- **Official Live Demo:** [https://prompt-oasis-rmu4e60.tmp.now](https://prompt-oasis-rmu4e60.tmp.now)
-- **Claim or Bind Permanent `.vercel.app` Domain:** [Claim Deployment on Vercel](https://vercel.com/claim-deployment?code=8a9e0e1d-adda-4dd7-91f2-16056885ec00)
+- **Official Live Demo:** [https://brisk-rowan-v8hc6ph.tmp.now](https://brisk-rowan-v8hc6ph.tmp.now)
+- **Claim or Bind Permanent `.vercel.app` Domain:** [Claim Deployment on Vercel](https://vercel.com/claim-deployment?code=1021af16-88ea-49f6-a15f-28140fd2cabb)
 - **1-Click GitHub to Vercel Import:** Click the **Deploy with Vercel** button above or import repository `mdashfaqueahamed2024-hue/fuel-station-management-system` at [vercel.com/new](https://vercel.com/new).
 
 ---
