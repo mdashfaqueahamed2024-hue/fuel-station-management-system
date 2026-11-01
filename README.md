@@ -8,13 +8,15 @@ Designed and developed as a university-level Bachelor of Technology (B.Tech) Cap
 
 ---
 
-## 🌐 Permanent Live Production Deployment (Works 24/7 on All Devices)
+## 🌐 Permanent Live Production Deployments (Works 24/7 on All Devices)
 
-* **🚀 Permanent Live URL (Google Chrome / Mobile / Desktop):**
+* **⚡ Official Vercel Production App (Connected to GitHub):**
+  ### 👉 [https://fuel-station-management-system-one.vercel.app](https://fuel-station-management-system-one.vercel.app)
+
+* **🚀 GitHub Pages Production Mirror:**
   ### 👉 [https://mdashfaqueahamed2024-hue.github.io/fuel-station-management-system/](https://mdashfaqueahamed2024-hue.github.io/fuel-station-management-system/)
 
-* **Vercel 1-Click Import:** Click the **Deploy with Vercel** button above or import repository `mdashfaqueahamed2024-hue/fuel-station-management-system` at [vercel.com/new](https://vercel.com/new).
-* **Claim Deployment on Vercel:** [Claim Temporary Vercel Deployment](https://vercel.com/claim-deployment?code=1021af16-88ea-49f6-a15f-28140fd2cabb)
+* **GitHub Repository:** [https://github.com/mdashfaqueahamed2024-hue/fuel-station-management-system](https://github.com/mdashfaqueahamed2024-hue/fuel-station-management-system)
 
 ---
 
